@@ -1,6 +1,6 @@
 # 🥤 Distributore Automatico
 
-Un progetto **Java** che simula il funzionamento di un distributore automatico. Gestisce prodotti (come caffè e snack), monete, acquisti e operazioni riservate agli amministratori, con salvataggio persistente dei dati su file.
+Progetto **Java** che simula il funzionamento di un distributore automatico. Gestisce prodotti (come caffè e snack), monete, acquisti e operazioni riservate agli amministratori, con salvataggio persistente dei dati su file.
 
 ---
 
