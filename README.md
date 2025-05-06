@@ -9,7 +9,7 @@ Un progetto **Java** che simula il funzionamento di un distributore automatico. 
 - ✅ Aggiunta e rimozione di prodotti (solo per admin)
 - 💰 Inserimento e rimozione di monete (solo valori: 5, 10, 20, 50, 100, 200)
 - 🛒 Acquisto di prodotti con controllo del credito
-- 📊 Contatori per tipo di prodotto (es. caffè, snack)
+- 📊 Contatori per disponibilità prodotto (es. caffè, snack)
 - 💾 Salvataggio automatico su file `distributore.txt`
 - 📂 Caricamento dati all’avvio
 - 🧾 Metodo `toString()` per visualizzare i prodotti disponibili
