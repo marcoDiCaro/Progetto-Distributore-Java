@@ -20,8 +20,9 @@ public abstract class Prodotto {
     protected double prezzo;
     protected String descrizione;
     protected TipoProdotto tipo;
+    protected int quantita;
 
-    public Prodotto(int id, String nome, double prezzo, String descrizione, TipoProdotto tipo) {
+    public Prodotto(int id, String nome, double prezzo, String descrizione, TipoProdotto tipo, int quantita) {
         if (id < 0) {
             throw new IllegalArgumentException(String.format("Il parametro %d deve essere un intero positivo.", id));
         }
@@ -46,6 +47,12 @@ public abstract class Prodotto {
         this.descrizione = descrizione;
 
         this.tipo = tipo;
+
+        if (quantita < 0) {
+            throw new IllegalArgumentException(
+                    String.format("Il parametro %d deve essere un numero positivo.", quantita));
+        }
+        this.quantita = quantita;
     }
 
     public int getId() {
@@ -57,6 +64,18 @@ public abstract class Prodotto {
             throw new IllegalArgumentException(String.format("Il parametro %d deve essere un intero positivo.", id));
         }
         this.id = id;
+    }
+
+    public int getQuantita() {
+        return quantita;
+    }
+
+    public void setQuantita(int quantita) {
+        if (quantita < 0) {
+            throw new IllegalArgumentException(
+                    String.format("Il parametro %d deve essere un numero positivo.", quantita));
+        }
+        this.quantita = quantita;
     }
 
     public String getNome() {
@@ -101,6 +120,7 @@ public abstract class Prodotto {
 
     @Override
     public String toString() {
-        return String.format("ID: %d, Nome: %s, Prezzo: %.2f, Descrizione: %s", id, nome, prezzo, descrizione);
+        return String.format("ID: %d, Nome: %s, Prezzo: %.2f, Descrizione: %s, Quantità: %d", id, nome, prezzo,
+                descrizione, quantita);
     }
 }

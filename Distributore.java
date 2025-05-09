@@ -33,10 +33,10 @@ public class Distributore {
     private HashMap<Integer, Prodotto> listaProdotti;
     private ArrayList<Moneta> listaMonete;
     private ArrayList<Admin> listaAdmin;
-    private int contaCaffe;
-    private int contaSnack;
+    //private int contaCaffe;
+    //private int contaSnack;
 
-    private void aggiungiContaTipo(TipoProdotto tipo) {
+    /* private void aggiungiContaTipo(TipoProdotto tipo) {
         switch (tipo) {
             case CAFFE:
                 contaCaffe += 1;
@@ -45,9 +45,9 @@ public class Distributore {
                 contaSnack += 1;
                 break;
         }
-    }
+    } */
 
-    private void sottraiContaTipo(TipoProdotto tipo) {
+    /* private void sottraiContaTipo(TipoProdotto tipo) {
         switch (tipo) {
             case CAFFE:
                 contaCaffe -= 1;
@@ -69,7 +69,7 @@ public class Distributore {
             default:
                 return contaClasse;
         }
-    }
+    } */
 
     private void caricaDati() {
         try {
@@ -94,19 +94,21 @@ public class Distributore {
                 TipoProdotto tipo = TipoProdotto.valueOf(tipoStr.toUpperCase());
                 Prodotto prodotto;
 
+                int quantita = Integer.parseInt(listaData[5].trim());
+
                 switch (tipo) {
                     case CAFFE:
-                        prodotto = new Caffe(id, nome, prezzo, descrizione);
+                        prodotto = new Caffe(id, nome, prezzo, descrizione, quantita);
                         break;
                     case SNACK:
-                        prodotto = new Snack(id, nome, prezzo, descrizione);
+                        prodotto = new Snack(id, nome, prezzo, descrizione, quantita);
                         break;
                     default:
                         throw new IllegalArgumentException("Tipo di prodotto sconosciuto: " + tipo);
                 }
 
                 listaProdotti.put(id, prodotto);
-                aggiungiContaTipo(prodotto.getTipo());
+                //aggiungiContaTipo(prodotto.getTipo());
             }
             myReader.close();
         } catch (FileNotFoundException e) {
@@ -121,8 +123,8 @@ public class Distributore {
             // myWriter.write("Files in Java might be tricky, but it is fun enough!");
             // myWriter.close();
             listaProdotti.forEach((k, v) -> {
-                String stringaDaScrivere = String.format("%d; %s; %.2f; %s; %s\n", v.getId(), v.getNome(),
-                        v.getPrezzo(), v.getDescrizione(), v.getTipo().name()); // Salviamo il tipo come stringa
+                String stringaDaScrivere = String.format("%d; %s; %.2f; %s; %s; %d\n", v.getId(), v.getNome(),
+                        v.getPrezzo(), v.getDescrizione(), v.getTipo().name(), v.getQuantita()); // Salviamo il tipo come stringa
                 try {
                     myWriter.write(stringaDaScrivere);
                 } catch (IOException e) {
@@ -145,29 +147,33 @@ public class Distributore {
         listaAdmin = new ArrayList<Admin>();
         listaAdmin.add(admin);
 
-        contaCaffe = 0;
-        contaSnack = 0;
+        //contaCaffe = 0;
+        //contaSnack = 0;
         caricaDati();
     }
 
-    public int getContaCaffe() {
+    /* public int getContaCaffe() {
         return contaCaffe;
     }
 
     public int getContaSnack() {
         return contaSnack;
-    }
+    } */
 
     public boolean aggiungiProdotto(Prodotto prodotto, boolean isAdmin) {
         if (!isAdmin) {
             throw new IllegalArgumentException("Per aggiungere un prodotto bisogna avere il permesso da ADMIN!!");
         }
         if (listaProdotti.containsKey(prodotto.getId())) {
-            throw new IllegalArgumentException(
-                    String.format("Il prodotto con id %d è già presente.", prodotto.getId()));
+            /* throw new IllegalArgumentException(
+                    String.format("Il prodotto con id %d è già presente.", prodotto.getId())); */
+            int idProdotto = prodotto.getId();
+            Prodotto prodottoDaModificare = listaProdotti.get(idProdotto);
+            prodottoDaModificare.setQuantita(prodottoDaModificare.getQuantita() + prodotto.getQuantita());
+        } else {
+             listaProdotti.put(prodotto.getId(), prodotto);
         }
-        listaProdotti.put(prodotto.getId(), prodotto);
-        aggiungiContaTipo(prodotto.getTipo());
+        // aggiungiContaTipo(prodotto.getTipo());
         salvaSuFile();
         return true;
     }
@@ -199,30 +205,10 @@ public class Distributore {
         if (!listaProdotti.containsKey(id)) {
             throw new IllegalArgumentException(String.format("Il prodotto con id %d non è presente.", id));
         }
-        Prodotto prodottoRimosso = listaProdotti.remove(id);
-        sottraiContaTipo(prodottoRimosso.getTipo());
+        listaProdotti.remove(id);
+        // sottraiContaTipo(prodottoRimosso.getTipo());
         salvaSuFile();
         return true;
-    }
-
-    public boolean rimuoviMoneta(int valore) {
-        if (valore != 5 && valore != 10 && valore != 20 && valore != 50 && valore != 100 && valore != 200) {
-            throw new IllegalArgumentException(
-                    String.format("Il parametro %d deve contenere uno tra 5, 10, 20, 50, 100, 200.", valore));
-        }
-        if (listaMonete.isEmpty()) {
-            throw new IllegalArgumentException("Lista Monete è vuota");
-        }
-        /*
-         * for (int i = 0; i < listaMonete.size(); i++) {
-         * Moneta moneta = listaMonete.get(i);
-         * if (moneta.getValore() == valore) {
-         * listaMonete.remove(i);
-         * break;
-         * }
-         * }
-         */
-        return listaMonete.removeIf(el -> el.getValore() == valore);
     }
 
     /*
@@ -261,7 +247,7 @@ public class Distributore {
 
     public double acquistaProdottoConMonete(int id, ArrayList<Moneta> moneteInserite) {
         Prodotto prodotto = cercaProdotto(id);
-        if (getDisponibilitaTipo(prodotto.getTipo()) == 0) {
+        if (prodotto.getQuantita() == 0) {
             throw new IllegalArgumentException(
                     String.format("Il prodotto %s non è momentaneamente disponibile.", prodotto.getTipo()));
         }
@@ -286,10 +272,12 @@ public class Distributore {
         }
 
         // Decremento il conteggio prodotto
-        sottraiContaTipo(prodotto.getTipo());
+        // sottraiContaTipo(prodotto.getTipo());
+
+        prodotto.setQuantita(prodotto.getQuantita() - 1);
 
         // Rimuovo il prodotto
-        listaProdotti.remove(id);
+        // listaProdotti.remove(id);
 
         // Sovrascrivo distributore.txt con listaProdotti aggiornata
         salvaSuFile();
@@ -307,8 +295,8 @@ public class Distributore {
         StringBuilder stringaOutput = new StringBuilder();
         listaProdotti.forEach((k, v) -> {
             stringaOutput
-                    .append(String.format("id: %d, nome: %s, prezzo: %.2f, descrizione: %s, tipo: %s \n", v.getId(),
-                            v.getNome(), v.getPrezzo(), v.getDescrizione(), v.getTipo().name()));
+                    .append(String.format("ID: %d, Nome: %s, Prezzo: %.2f, Descrizione: %s, Quantità: %d \n", v.getId(),
+                            v.getNome(), v.getPrezzo(), v.getDescrizione(), v.getTipo().name(), v.getQuantita()));
         });
         return stringaOutput.toString();
     }

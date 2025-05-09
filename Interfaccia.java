@@ -25,15 +25,19 @@ public class Interfaccia {
             System.out.println("Inserisci Descrizione Prodotto:");
             String descrizione = myObj.nextLine();
 
+            System.out.println("Inserisci Quantità Prodotto:");
+            int quantita = myObj.nextInt();
+            // Consuma la riga vuota lasciata da nextInt()
+
             System.out.println("Inserisci Tipo Prodotto (CAFFE, SNACK):");
             String tipoProdotto = myObj.nextLine().toUpperCase();
             TipoProdotto tipo = TipoProdotto.valueOf(tipoProdotto);
 
             Prodotto prodotto;
             if (tipo == TipoProdotto.CAFFE) {
-                prodotto = new Caffe(id, nome, prezzo, descrizione);
+                prodotto = new Caffe(id, nome, prezzo, descrizione, quantita);
             } else if (tipo == TipoProdotto.SNACK) {
-                prodotto = new Snack(id, nome, prezzo, descrizione);
+                prodotto = new Snack(id, nome, prezzo, descrizione, quantita);
             } else {
                 throw new IllegalArgumentException("Tipo prodotto non valido.");
             }
@@ -122,12 +126,12 @@ public class Interfaccia {
             case 1:
                 rimuoviProdotto();
                 break;
-            case 2:
+            /* case 2:
                 System.out.println("Conteggio Caffè: " + distributore.getContaCaffe());
                 break;
             case 3:
                 System.out.println("Conteggio Snack: " + distributore.getContaSnack());
-                break;
+                break; */
             default:
                 System.out.println("Azione non valida");
         }
@@ -151,8 +155,8 @@ public class Interfaccia {
         if (admin) {
             System.out.println("0: Aggiungi Prodotto");
             System.out.println("1: Rimuovi Prodotto");
-            System.out.println("2: Conteggio Caffè");
-            System.out.println("3: Conteggio Snack");
+            // System.out.println("2: Conteggio Caffè");
+            //System.out.println("3: Conteggio Snack");
         } else {
             // System.out.println("0: Inserisci Monete");
             // System.out.println("1: Acquista Prodotto");
