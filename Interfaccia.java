@@ -28,6 +28,7 @@ public class Interfaccia {
             System.out.println("Inserisci Quantità Prodotto:");
             int quantita = myObj.nextInt();
             // Consuma la riga vuota lasciata da nextInt()
+            myObj.nextLine();
 
             System.out.println("Inserisci Tipo Prodotto (CAFFE, SNACK):");
             String tipoProdotto = myObj.nextLine().toUpperCase();

@@ -276,8 +276,10 @@ public class Distributore {
 
         prodotto.setQuantita(prodotto.getQuantita() - 1);
 
-        // Rimuovo il prodotto
-        // listaProdotti.remove(id);
+        if (prodotto.getQuantita() == 0) {
+            // Se il prodotto è terminato lo rimuovo
+            listaProdotti.remove(id);
+        }
 
         // Sovrascrivo distributore.txt con listaProdotti aggiornata
         salvaSuFile();
@@ -295,7 +297,7 @@ public class Distributore {
         StringBuilder stringaOutput = new StringBuilder();
         listaProdotti.forEach((k, v) -> {
             stringaOutput
-                    .append(String.format("ID: %d, Nome: %s, Prezzo: %.2f, Descrizione: %s, Quantità: %d \n", v.getId(),
+                    .append(String.format("ID: %d, Nome: %s, Prezzo: %.2f, Descrizione: %s, Tipo: %s, Quantità: %d \n", v.getId(),
                             v.getNome(), v.getPrezzo(), v.getDescrizione(), v.getTipo().name(), v.getQuantita()));
         });
         return stringaOutput.toString();
